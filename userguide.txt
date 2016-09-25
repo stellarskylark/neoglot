@@ -18,11 +18,7 @@ Constructing Rule Files:
         -PARAMS
     The headers can appear in any order. All but -CATEGORIES and -SYLLABLES
     are optional. Each parameter within each section is separated by a newline.
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
     You can usually have whatever whitespace in each line in order to organize
     things in a way that makes sense to you; the program strips out whitespace
     before and after each line, and removes whitespace inside category definitions,
@@ -42,15 +38,8 @@ Constructing Rule Files:
     SINGLE CHARACTER. If your orthography requires digraphs, trigraphs, or
     (heaven forbid), anything higher than that, use rewrite rules.
 
-<<<<<<< HEAD
     Any character encountered in any section that isn't defined as a category
     will be treated as a literal character.
-=======
-    Your category characters SHOULD NEVER APPEAR AS PHONEME CHARACTERS. This is
-    because under the hood, PyConlangWordGen assigns each phoneme to a category
-    containing only itself, allowing you to specify exact phonemes in your
-    syllables, illegality rules, and illegality exceptions.
->>>>>>> origin/master
 
     Example categories section:
         -CATEGORIES
@@ -93,23 +82,12 @@ Constructing Rule Files:
 
     -REWRITE specifies rewrite rules if your language uses digraphs.
     Rewrite rules take the form "inp|outp". The program will substitute any string
-<<<<<<< HEAD
     "inp" for the string "outp". So, if your language uses the digraph "ch", you
     could specify it as "c" in the categories section, and use the rewrite rule
     "c|ch". You can even specify specific categories to replace.
 
     You can also specify a blank output string, and the program will remove every
     occurrence of the string.
-
-=======
-    "inp" for the string "outp". So, if your language uses the digraph "ch", you 
-    could specify it as "c" in the categories section, and use the rewrite rule 
-    "c|ch". You can even specify specific categories to replace.
-	
-    You can also specify a blank output string, and the program will remove every
-    occurrence of the string.
-	
->>>>>>> origin/master
     Rewrite rules are applied in the order they are defined.
 
     Example rewrite section:

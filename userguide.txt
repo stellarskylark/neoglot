@@ -39,7 +39,7 @@ Constructing Rule Files:
     (heaven forbid), anything higher than that, use rewrite rules.
 
     Your category characters SHOULD NEVER APPEAR AS PHONEME CHARACTERS. This is
-    because under the hood, PyWordGen assigns each phoneme to a category
+    because under the hood, PyConlangWordGen assigns each phoneme to a category
     containing only itself, allowing you to specify exact phonemes in your
     syllables, illegality rules, and illegality exceptions.
 
@@ -49,6 +49,7 @@ Constructing Rule Files:
         V:aeiou
 
     -SYLLABLES specifies every possible syllable in your language by category.
+    
     Example syllables section:
         -SYLLABLES
         CV
@@ -70,6 +71,7 @@ Constructing Rule Files:
     You can even specify environments in which otherwise illegal clusters are
     acceptable (note that these environments can only extend one character in
     either direction).
+    
     Example illegal exceptions section:
         -ILLEGALEXCEPTIONS
         ts
@@ -82,13 +84,13 @@ Constructing Rule Files:
     -REWRITE specifies rewrite rules if your language uses digraphs.
     Rewrite rules take the form "inp|outp". The program will substitute any string
     "inp" for the string "outp". So, if your language uses the digraph "ch", you 
-	could specify it as "c" in the categories section, and use the rewrite rule 
-	"c|ch". You can even specify specific categories to replace.
+    could specify it as "c" in the categories section, and use the rewrite rule 
+    "c|ch". You can even specify specific categories to replace.
 	
-	You can also specify a blank output string, and the program will remove every
-	occurrence of the string.
+    You can also specify a blank output string, and the program will remove every
+    occurrence of the string.
 	
-	Rewrite rules are applied in the order they are defined.
+    Rewrite rules are applied in the order they are defined.
 
     Example rewrite section:
         -REWRITE
@@ -106,6 +108,6 @@ Constructing Rule Files:
         -PARAMS
         minsylls=1  				#Smallest number of syllables that can occur in a word
         maxsylls=3  				#Largest number of syllables that can occur in a word
-		showrejected=False  		#Show words deemed illegal.
-		show_pre_rewrite=False  	#Show words before applying the rewriting rules.
-		show_rewrite_trigger=False  #Print a message every time a rewrite rule is applied.
+	showrejected=False  			#Show words deemed illegal.
+	show_pre_rewrite=False  		#Show words before applying the rewriting rules.
+	show_rewrite_trigger=False  		#Print a message every time a rewrite rule is applied.

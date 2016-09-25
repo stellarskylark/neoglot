@@ -1,19 +1,25 @@
 # -*- coding: utf-8 -*-
-# PyConlangWordGen v1.0
+# PyConlangWordGen v1.1
 import sys
 import random
 import re
 
 sections = ['-CATEGORIES', '-REWRITE', '-SYLLABLES', '-ILLEGAL',
             '-ILLEGALEXCEPTIONS', '-PARAMS', '']
-paramlist = ['minsylls', 'maxsylls']
+paramlist = ['minsylls', 'maxsylls', 'showrejected', 'show_pre_rewrite',
+            'show_rewrite_trigger']
 categories = {'#':['#'], '%':['%']}
 syllables = []
 illegal = []
-rewrite = {'#':'', '$':''}
+rewritekeys = ['#', '%']  # Normally you'd just store these as a dictionary. However, we want the program to run
+rewritevalues = ['', '']  # these rules in the order the user defines them. Iterating through a dictionary doesn't always do that.
 exceptions = []
-minSyllables = 1
-maxSyllables = 3
+# Parameters
+minsyllables = 1
+maxsyllables = 3
+showrejected = False
+show_pre_rewrite = False
+show_rewrite_trigger = False
 
 # Check that arguments are correct
 if len(sys.argv) < 3 or len(sys.argv) > 3:
@@ -46,6 +52,8 @@ try:
         if rules[i] in sections:
             break
         cat, included = rules[i].split(':')
+        cat = cat.strip()
+        included = included.strip().replace(' ', '')
         if len(cat) > 1:
             print("Your category names must be only one character long.")
             print(cat + " is invalid.")
@@ -63,32 +71,19 @@ except ValueError:
 # Set up syllable types
 try:
     for i in range(rules.index('-SYLLABLES') + 1, len(rules)):
-        if rules[i] in sections:
+        if rules[i].strip() in sections:
             break
-        syllables.append(rules[i])
+        syllables.append(rules[i].strip())
 except ValueError:
     print("You must specify some syllable types.")
     sys.exit()
 
-# Set up rewrite rules
-try:
-    for i in range(rules.index('-REWRITE') + 1, len(rules)):
-        if rules[i] in sections:
-            break
-        inp, outp = rules[i].split('|')
-        if len(inp) < 1 or len(outp) < 1:
-            print("Invalid rewrite rule: " + rules[i])
-            sys.exit()
-        rewrite[inp] = outp
-except ValueError:
-    pass  # The user didn't specify any rewrite rules, that's okay.
-
 # Set up illegal clusters
 try:
     for i in range(rules.index('-ILLEGAL') + 1, len(rules)):
-        if rules[i] in sections:
+        if rules[i].strip() in sections:
             break
-        if len(rules[i]) < 2:
+        if len(rules[i].strip()) < 2:
             print("Error with illegal cluster: " + rules[i])
             print("Illegal clusters must be longer than a single category.")
             sys.exit()
@@ -100,7 +95,7 @@ try:
             else:
                 return "[" + ''.join(categories[rule[0]]) + "][" + ''.join(categories[rule[1]]) + "]"
 
-        illegal.append("(?=(" + generate_regex(rules[i]) + "))")
+        illegal.append("(?=(" + generate_regex(rules[i].strip()) + "))")
 except ValueError:
     print("Warning: No illegal clusters specified.")
     print("You don't have to specify any, but most languages do.")
@@ -108,12 +103,12 @@ except ValueError:
 # Create a list of exceptionss
 try:
     for i in range(rules.index('-ILLEGALEXCEPTIONS') + 1, len(rules)):
-        if rules[i] in sections:
+        if rules[i].strip() in sections:
             break
 
         #Recursively returns a list of clusters that fit the rule
         def generate_clusters(rule):
-            if len(rule) > 2:
+            if len(rule) > 1:
                 outp = []
                 for x in categories[rule[0]]:
                     for y in generate_clusters(rule[1:]):
@@ -122,14 +117,30 @@ try:
             else:
                 outp = []
                 for x in categories[rule[0]]:
-                    for y in categories[rule[1]]:
-                        outp.append(x + y)
+                    outp.append(x)
                 return outp
-        exceptions += generate_clusters(rules[i])
+        exceptions += generate_clusters(rules[i].strip())
 except ValueError:
     pass  # User hasn't specified any exceptions, and that's okay.
 
-# Read language-specific parameters
+# Set up rewrite rules
+try:
+    for i in range(rules.index('-REWRITE') + 1, len(rules)):
+        if rules[i].strip() in sections:
+            break
+        inp, outp = rules[i].split('|')
+        inp = inp.strip()
+        outp = outp.strip()
+        if len(inp) < 1:
+            print("Invalid rewrite rule: " + rules[i])
+            sys.exit()
+        for repl in generate_clusters(inp):
+            rewritekeys.append(repl)
+            rewritevalues.append(outp)
+except ValueError:
+    pass  # The user didn't specify any rewrite rules, that's okay.
+
+# Read parameters
 try:
     for i in range(rules.index('-PARAMS') + 1, len(rules)):
         if rules[i] in sections:
@@ -147,6 +158,12 @@ try:
                 maxSyllables = int(param[1])
             except ValueError:
                 print(rules[i] + " is an invalid parameter declaration. Using default value of minsylls: " + str(maxSyllables))
+        elif param[0].strip() == 'showrejected':
+            showrejected = True if param[1].strip() == 'True' else False
+        elif param[0].strip() == 'show_pre_rewrite':
+            show_pre_rewrite = True if param[1].strip() == 'True' else False
+        elif param[0].strip() == 'show_rewrite_trigger':
+            show_rewrite_trigger = True if param[1].strip() == 'True' else False
 except ValueError:
     pass  # No parameters? No problem.
 
@@ -171,21 +188,21 @@ def check_illegal(word):
     if word == "#%":
         return True
     for ill in illegal:
-        check = re.findall(ill, word)
-        if check:
+        matches = re.findall(ill, word)
+        if matches:
             lastindex = 0
-            for ch in check:
-                lastindex = word.find(ch, lastindex + 1)
+            for m in matches:
+                lastindex = word.find(m, lastindex + 1)
                 for ex in exceptions:
                     handled = False
                     if lastindex > 0:
-                        if len(word) > 4 + lastindex:
-                            cut = word[lastindex-1:len(ch)+2]
+                        if len(word) > 2 + len(m) + lastindex:
+                            cut = word[lastindex-1:len(m)+2]
                         else:
                             cut = word[lastindex-1:len(word)]
                     else:
-                        if len(word) > 4:
-                            cut = word[0:len(ch)+2]
+                        if len(word) > 2 + len(m):
+                            cut = word[0:len(m)+2]
                         else:
                             cut = word
                     if ex in cut:
@@ -196,10 +213,10 @@ def check_illegal(word):
 
 
 def rewrite_word(word):
-    if len(rewrite) < 1:
-        return word
-    for inp, outp in rewrite.items():
+    for inp, outp in zip(rewritekeys, rewritevalues):
         if inp in word:
+            if show_rewrite_trigger:
+                print("Replacing " + inp + " in " + word + " with " + outp)
             word = word.replace(inp, outp)
     return word
 
@@ -208,8 +225,12 @@ def rewrite_word(word):
 for n in range(0, numwords):
     word = ""
     while check_illegal("#" + word + "%"):
+        if showrejected and word != "":
+            print("Rejected: " + word)
         word = ""
-        size = random.randint(minSyllables, maxSyllables)
+        size = random.randint(minsyllables, maxsyllables)
         for s in range(0, size):
             word = word + generatesyllable(s, size - 1)
+    if show_pre_rewrite:
+        print("Pre-Rewrite: " + word)
     print(rewrite_word(word))

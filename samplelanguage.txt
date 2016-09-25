@@ -1,50 +1,50 @@
 -CATEGORIES
-V:aiueo
-C:kgs0zjtc1dnhfpbmyrw
-Y:kgnhpbmr
-G:kstcn0
-q:q
+	V: a i u e o
+	C: kgs0zjtc1dnhfpbmyrw
+	Y: kgnhpbmr
+	G: kstcn0
+	q: q
 -SYLLABLES
-V
-Vn
-CV
-CVn
-GqV
-GqVn
-YyV
-YyVn
+	V
+	Vn
+	CV
+	CVn
+	GqV
+	GqVn
+	YyV
+	YyVn
 -ILLEGAL
-#Gq
-1V
-si
-0e
-di
-du
-hu
-fV
-yi
-ye
-wu
-Yyi
-Yye
-CC
-#V%
-nqn
+	#Gq
+	1V
+	si
+	0e
+	di
+	du
+	hu
+	fV
+	yi
+	ye
+	wu
+	Yyi
+	Yye
+	CC
+	#V%
+	nqn
 -ILLEGALEXCEPTIONS
-1u
-fu
+	1u
+	fu
 -REWRITE
+c|ch
+	0|sh
+	1|ts
 ee|ei
-oo|ou
+	oo|ou
 kq|kk
-sq|ss
-tq|tt
-cq|tch
-nq|nn
-0q|ssh
-shq|ssh
-0|sh
-1|ts
+	sq|ss
+	tq|tt
+	chq|tch
+	nq|nn
+	shq|ssh
 -PARAMS
-minsylls=2
-maxsylls=4
+	minsylls=2
+	maxsylls=4

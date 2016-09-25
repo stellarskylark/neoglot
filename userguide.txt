@@ -17,7 +17,13 @@ Constructing Rule Files:
         -REWRITE
         -PARAMS
     The headers can appear in any order. All but -CATEGORIES and -SYLLABLES
-    are optional.
+    are optional. Each parameter within each section is separated by a newline.
+	
+	You can usually have whatever whitespace in each line in order to organize
+	things in a way that makes sense to you; the program strips out whitespace
+	before and after each line, and removes whitespace inside category definitions,
+	rewrite rules, and parameter settings. However, A BLANK LINE IS ALWAYS TREATED
+	AS THE END OF THE SECTION. This includes lines containing nothing but whitespace.
 
     NOTE: In all categories, "#" is interpreted as the beginning of the word,
     and "%" as the end of the word.
@@ -76,11 +82,13 @@ Constructing Rule Files:
     -REWRITE specifies rewrite rules if your language uses digraphs.
     Rewrite rules take the form "inp|outp". The program will substitute any string
     "inp" for the string "outp". So, if your language uses the digraph "ch", you 
-	could specify it as "c" in the categories section, and
-    use the rewrite rule "c|ch".
+	could specify it as "c" in the categories section, and use the rewrite rule 
+	"c|ch". You can even specify specific categories to replace.
 	
-	Note that due to how Python dictionaries work, rewrite rules are not always
-	run in order. Thus, you may have to specify more than one for a specific case.
+	You can also specify a blank output string, and the program will remove every
+	occurrence of the string.
+	
+	Rewrite rules are applied in the order they are defined.
 
     Example rewrite section:
         -REWRITE
@@ -94,7 +102,10 @@ Constructing Rule Files:
     followed by the value.
 
     You can specify the following parameters. Each is presented along with its
-    default value:
+    default value, along with comments explaining its function.
         -PARAMS
-        minsylls=1
-        maxsylls=3
+        minsylls=1  				#Smallest number of syllables that can occur in a word
+        maxsylls=3  				#Largest number of syllables that can occur in a word
+		showrejected=False  		#Show words deemed illegal.
+		show_pre_rewrite=False  	#Show words before applying the rewriting rules.
+		show_rewrite_trigger=False  #Print a message every time a rewrite rule is applied.

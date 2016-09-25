@@ -1,0 +1,100 @@
+Usage:
+    The program is run as follows:
+        1. Open command prompt
+        2. Navigate to the folder containing pywordgen.py
+        3. Run this command:
+            python pyconlangwordgen.py [PATH_TO_RULES_FILE] [NUMWORDS]
+        Substitute [PATH_TO_RULES_FILE] for the actual path, and [NUMWORDS] for
+        the number of words you'd like to generate.
+
+Constructing Rule Files:
+    A rules file is constructed of headers, followed by a newline, followed
+    by a series of parameters for each header. The headers are:
+        -CATEGORIES
+        -SYLLABLES
+        -ILLEGAL
+        -ILLEGALEXCEPTIONS
+        -REWRITE
+        -PARAMS
+    The headers can appear in any order. All but -CATEGORIES and -SYLLABLES
+    are optional.
+
+    NOTE: In all categories, "#" is interpreted as the beginning of the word,
+    and "%" as the end of the word.
+
+    See samplelanguage.txt for a working example. Bonus points if you can
+	figure out what language it's trying to simulate!
+
+    -CATEGORIES specifies a list of different phonemic categories that are used
+    to generate words and check illegal clusters.
+    Categories are specified as a SINGLE LETTER, followed by a colon, and a
+    string of phonemes (not separated in any way). EACH PHONEME MUST BE A
+    SINGLE CHARACTER. If your orthography requires digraphs, trigraphs, or
+    (heaven forbid), anything higher than that, use rewrite rules.
+
+    Your category characters SHOULD NEVER APPEAR AS PHONEME CHARACTERS. This is
+    because under the hood, PyWordGen assigns each phoneme to a category
+    containing only itself, allowing you to specify exact phonemes in your
+    syllables, illegality rules, and illegality exceptions.
+
+    Example categories section:
+        -CATEGORIES
+        C:ptkbdg
+        V:aeiou
+
+    -SYLLABLES specifies every possible syllable in your language by category.
+    Example syllables section:
+        -SYLLABLES
+        CV
+        CVC
+        VVC
+        CrC
+
+    -ILLEGAL specifies every illegal cluster in your language by category.
+    These can be as long as you want.
+
+    Example illegal section:
+        -ILLEGAL
+        Vr
+        SF
+        CF
+        FC
+
+    -ILLEGALEXCEPTIONS specifies exceptions to the illegality rules.
+    You can even specify environments in which otherwise illegal clusters are
+    acceptable (note that these environments can only extend one character in
+    either direction).
+    Example illegal exceptions section:
+        -ILLEGALEXCEPTIONS
+        ts
+        st
+        ar
+        sn
+        #Vr
+        sVr
+
+    -REWRITE specifies rewrite rules if your language uses digraphs.
+    Rewrite rules take the form "inp|outp". The program will substitute any string
+    "inp" for the string "outp". So, if your language uses the digraph "ch", you 
+	could specify it as "c" in the categories section, and
+    use the rewrite rule "c|ch".
+	
+	Note that due to how Python dictionaries work, rewrite rules are not always
+	run in order. Thus, you may have to specify more than one for a specific case.
+
+    Example rewrite section:
+        -REWRITE
+        c|ch
+        q|au
+        8|sch
+
+    -PARAMS allows you to specify language-specific parameters. For example,
+    in some languages monosyllabic words are uncommon or impossible.
+    Parameters are specified with the parameter name, followed by an equals sign,
+    followed by the value.
+
+    You can specify the following parameters. Each is presented along with its
+    default value:
+        -PARAMS
+        minsylls=1
+        maxsylls=3

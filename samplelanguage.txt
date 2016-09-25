@@ -3,7 +3,6 @@
 	C: kgs0zjtc1dnhfpbmyrw
 	Y: kgnhpbmr
 	G: kstcn0
-	q: q
 -SYLLABLES
 	V
 	Vn

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# PyConlangWordGen v1.1
+# PyConlangWordGen v1.1.1
 import sys
 import random
 import re
@@ -8,11 +8,11 @@ sections = ['-CATEGORIES', '-REWRITE', '-SYLLABLES', '-ILLEGAL',
             '-ILLEGALEXCEPTIONS', '-PARAMS', '']
 paramlist = ['minsylls', 'maxsylls', 'showrejected', 'show_pre_rewrite',
             'show_rewrite_trigger']
-categories = {'#':['#'], '%':['%']}
+categories = {}
 syllables = []
 illegal = []
-rewritekeys = ['#', '%']  # Normally you'd just store these as a dictionary. However, we want the program to run
-rewritevalues = ['', '']  # these rules in the order the user defines them. Iterating through a dictionary doesn't always do that.
+rewritekeys = []  # Normally you'd just store these as a dictionary. However, we want the program to run
+rewritevalues = []  # these rules in the order the user defines them. Iterating through a dictionary doesn't always do that.
 exceptions = []
 # Parameters
 minsyllables = 1
@@ -46,6 +46,29 @@ except OSError:
     print("Rules file could not be found.")
     print("syntax: python pywordgen.py [RULESFILE] [NUMWORDS]")
 
+
+#Recursively returns a list of clusters that fit the rule
+def generate_clusters(rule):
+    if len(rule) > 1:
+        outp = []
+        try:
+            for x in categories[rule[0]]:
+                for y in generate_clusters(rule[1:]):
+                    outp.append(x + y)
+            return outp
+        except KeyError:
+            for y in generate_clusters(rule[1:]):
+                outp.append(rule[0] + y)
+            return outp
+    else:
+        outp = []
+        try:
+            for x in categories[rule[0]]:
+                outp.append(x)
+            return outp
+        except KeyError:
+            return [rule[0]]
+
 # Set up phoneme categories
 try:
     for i in range(rules.index('-CATEGORIES') + 1, len(rules)):
@@ -62,8 +85,6 @@ try:
             print("You must include some phonemes in category " + cat)
             sys.exit()
         categories[cat] = [char for char in included]
-        for phone in included:
-            categories[phone] = phone
 except ValueError:
     print("You must specify some categories.")
     sys.exit()
@@ -91,9 +112,21 @@ try:
         # Recursively returns a regex that fits the rule
         def generate_regex(rule):
             if len(rule) > 2:
-                return "[" + ''.join(categories[rule[0]]) + "]" + generate_regex(rule[1:])
+                try:
+                    return "[" + ''.join(categories[rule[0]]) + "]" + generate_regex(rule[1:])
+                except KeyError:
+                    return "[" + rule[0] + "]" + generate_regex(rule[1:])
             else:
-                return "[" + ''.join(categories[rule[0]]) + "][" + ''.join(categories[rule[1]]) + "]"
+                try:
+                    cat1 = ''.join(categories[rule[0]])
+                except KeyError:
+                    cat1 = rule[0]
+                try:
+                    cat2 = ''.join(categories[rule[1]])
+                except KeyError:
+                    cat2 = rule[1]
+                finally:
+                    return "[" + cat1 + "][" + cat2 + "]"
 
         illegal.append("(?=(" + generate_regex(rules[i].strip()) + "))")
 except ValueError:
@@ -105,20 +138,6 @@ try:
     for i in range(rules.index('-ILLEGALEXCEPTIONS') + 1, len(rules)):
         if rules[i].strip() in sections:
             break
-
-        #Recursively returns a list of clusters that fit the rule
-        def generate_clusters(rule):
-            if len(rule) > 1:
-                outp = []
-                for x in categories[rule[0]]:
-                    for y in generate_clusters(rule[1:]):
-                        outp.append(x + y)
-                return outp
-            else:
-                outp = []
-                for x in categories[rule[0]]:
-                    outp.append(x)
-                return outp
         exceptions += generate_clusters(rules[i].strip())
 except ValueError:
     pass  # User hasn't specified any exceptions, and that's okay.
@@ -180,7 +199,7 @@ def generatesyllable(index, size):
         try:
             outp = outp + random.choice(categories[char])
         except KeyError:
-            print(char + " in syllable " + syll + " is not a defined category.")
+            outp = outp + char
     return outp
 
 
@@ -233,4 +252,10 @@ for n in range(0, numwords):
             word = word + generatesyllable(s, size - 1)
     if show_pre_rewrite:
         print("Pre-Rewrite: " + word)
-    print(rewrite_word(word))
+    # Note: # and % must be added to the word in order to allow the user to
+    # specify rewrite rules including the beginning and end of the word.
+    # The final two .replace() statements are the only safe way to remove
+    # these characters from the output, since the rewrite rule results in
+    # # and % being removed from the string. Thus, taking word[1:-1] doesn't
+    # work here, even if it's cleaner.
+    print(rewrite_word("#" + word + "%").replace('#', '').replace('%', ''))

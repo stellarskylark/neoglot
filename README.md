@@ -15,7 +15,7 @@ For details on writing rules files, see userguide.txt
 #So why did you make this?
 I'm a geek.
 
-Okay, but seriously. I've done a bit of conlanging, and I've used Mark Rosenfelder's word generator at http://zompist.com/gen.html quite a bit. But as much as I like Mark Rosenfelde, his Language Construction Kit (responsible for most of my linguistics knowledge), and his brilliant SCA<sup>2</sup>, one thing about his word generator always bothered me: it doesn't let you specify illegality rules.
+Okay, but seriously. I've done a bit of conlanging, and I've used Mark Rosenfelder's word generator at http://zompist.com/gen.html quite a bit. But as much as I like Mark Rosenfelder, his Language Construction Kit (responsible for most of my linguistics knowledge), and his brilliant SCA<sup>2</sup>, one thing about his word generator always bothered me: it doesn't let you specify illegality rules.
 
 Let's say your conlang has (C)CV(C) syllable structure, and two illegality rules: no /nasal/+/fricative/, and no /stop/+/nasal/. In Mark Rosenfelder's generator, to ensure that these clusters are never generated, you have to define every syllable type that is allowed:
 

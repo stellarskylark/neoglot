@@ -2,7 +2,7 @@
 A word generator, written in Python, intended for conlangs. As the name implies.
 
 #Usage Instructions
-1. Install the latest version of Python 3.
+1. Install the latest version of Python 3 from python.org.
 2. Download PyConlangWordGen.
 3. Open CMD in the folder containing PyConlangWordGen.
 4. Run "python pyconlangwordgen.py samplelanguage.txt 20"

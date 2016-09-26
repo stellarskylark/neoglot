@@ -7,7 +7,7 @@ import re
 sections = ['-CATEGORIES', '-REWRITE', '-SYLLABLES', '-ILLEGAL',
             '-ILLEGALEXCEPTIONS', '-PARAMS', '']
 paramlist = ['minsylls', 'maxsylls', 'showrejected', 'show_pre_rewrite',
-            'show_rewrite_trigger']
+            'show_rewrite_trigger', 'filter_duplicates']
 categories = {}
 syllables = []
 illegal = []
@@ -20,6 +20,9 @@ maxsyllables = 3
 showrejected = False
 show_pre_rewrite = False
 show_rewrite_trigger = False
+
+filter_duplicates = True
+already_generated = []
 
 # Check that arguments are correct
 if len(sys.argv) < 3 or len(sys.argv) > 3:
@@ -183,6 +186,8 @@ try:
             show_pre_rewrite = True if param[1].strip() == 'True' else False
         elif param[0].strip() == 'show_rewrite_trigger':
             show_rewrite_trigger = True if param[1].strip() == 'True' else False
+        elif param[0].strip() == 'filter_duplicates':
+            filter_duplicates = False if param[1].strip() == 'False' else True
 except ValueError:
     pass  # No parameters? No problem.
 
@@ -205,6 +210,8 @@ def generatesyllable(index, size):
 
 def check_illegal(word):
     if word == "#%":
+        return True
+    if filter_duplicates and word[1:-1] in already_generated:
         return True
     for ill in illegal:
         matches = re.findall(ill, word)
@@ -259,3 +266,4 @@ for n in range(0, numwords):
     # # and % being removed from the string. Thus, taking word[1:-1] doesn't
     # work here, even if it's cleaner.
     print(rewrite_word("#" + word + "%").replace('#', '').replace('%', ''))
+    if filter_duplicates: already_generated.append(word)

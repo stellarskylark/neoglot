@@ -106,6 +106,7 @@ Constructing Rule Files:
         -PARAMS
         minsylls=1  				#Smallest number of syllables that can occur in a word
         maxsylls=3  				#Largest number of syllables that can occur in a word
-	showrejected=False  			#Show words deemed illegal.
-	show_pre_rewrite=False  		#Show words before applying the rewriting rules.
-	show_rewrite_trigger=False  		#Print a message every time a rewrite rule is applied.
+	    showrejected=False  		#Show words deemed illegal.
+	    show_pre_rewrite=False  	#Show words before applying the rewriting rules.
+	    show_rewrite_trigger=False  #Print a message every time a rewrite rule is applied.
+		never_generate_list=None	#Specify a file containing a list of words treated as illegal (separated by newlines). Useful for suppressing homophones.

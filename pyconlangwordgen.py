@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# PyConlangWordGen v1.1.1
+# PyConlangWordGen v1.1.3
 import sys
 import random
 import re
@@ -7,7 +7,7 @@ import re
 sections = ['-CATEGORIES', '-REWRITE', '-SYLLABLES', '-ILLEGAL',
             '-ILLEGALEXCEPTIONS', '-PARAMS', '']
 paramlist = ['minsylls', 'maxsylls', 'showrejected', 'show_pre_rewrite',
-            'show_rewrite_trigger', 'filter_duplicates']
+            'show_rewrite_trigger', 'filter_duplicates', 'never_generate_file']
 categories = {}
 syllables = []
 illegal = []
@@ -23,6 +23,7 @@ show_rewrite_trigger = False
 
 filter_duplicates = True
 already_generated = []
+never_generate_file = ""
 
 # Check that arguments are correct
 if len(sys.argv) < 3 or len(sys.argv) > 3:
@@ -43,7 +44,7 @@ except ValueError:
 try:
     f = open(rules)
     rules = None  # I want to keep using the rules variable
-    rules = f.read().split("\n")
+    rules = [x.strip() for x in f.read().split("\n") if x != '']
     f.close()
 except OSError:
     print("Rules file could not be found.")
@@ -188,8 +189,21 @@ try:
             show_rewrite_trigger = True if param[1].strip() == 'True' else False
         elif param[0].strip() == 'filter_duplicates':
             filter_duplicates = False if param[1].strip() == 'False' else True
+        elif param[0].strip() == 'never_generate_file':
+            never_generate_file = param[1].strip()
 except ValueError:
     pass  # No parameters? No problem.
+
+#Set up never-generate file
+if never_generate_file:
+    try:
+        f = open(never_generate_file)
+        ng = f.read().split('\n')
+        already_generated += ng
+    except OSError:
+        print("Could not find never-generate file at \"" + never_generate_file + "\"")
+        print("Please make sure the path is correct before trying again.")
+        sys.exit()
 
 def generatesyllable(index, size):
     syll = random.choice(syllables)
@@ -212,18 +226,49 @@ def check_illegal(word):
     if word == "#%":
         return True
     if filter_duplicates and word[1:-1] in already_generated:
+        if showrejected:
+            print(word[1:-1] + " rejected because it's a duplicate.")
         return True
+    if never_generate_file:
+        if word[1:-1] in already_generated:
+            if showrejected:
+                print(word[1:-1] + " rejected for being a duplicate")
+            return True
+        # This is so it works whether the word is specified in phoneme symbols
+        # or in the conlang's final orthography.
+        elif rewrite_word(word).replace('#', '').replace('%', '') in already_generated:
+            if showrejected:
+                print(word[1:-1] + " rejected for being a duplicate")
+            return True
+    # So, this is an unreadable monster, isn't it?
+    # This bit of code first applies each illegality rule (a regex) to the word.
+    # If it matches anything, it gets the index of each bit that matched.
+    #
+    # Then, it takes a slice containing the illegal string and the two
+    # characters on either side (which allows the user to specify exceptional
+    # environments.
+    #
+    # Finally, it checks if any of the illegality exceptions 'pardon' the string.
+    # If at any point a string is found that both fits the illegality rules and
+    # is not handled by an exception, return that the word is illegal.
     for ill in illegal:
         matches = re.findall(ill, word)
         if matches:
             lastindex = 0
             for m in matches:
                 lastindex = word.find(m, lastindex + 1)
+                handled = False
                 for ex in exceptions:
-                    handled = False
+                    if len(ex) == len(m):  # Not an environment exception
+                        if ex == m:
+                            handled = True
+                            break
+                        continue
+                    elif len(ex) < len(m):  # Not an exception to this rule
+                        continue
                     if lastindex > 0:
-                        if len(word) > 2 + len(m) + lastindex:
-                            cut = word[lastindex-1:len(m)+2]
+                        if len(word) > 1 + len(m) + lastindex:
+                            cut = word[lastindex-1:lastindex+len(m)+1]
                         else:
                             cut = word[lastindex-1:len(word)]
                     else:
@@ -233,7 +278,10 @@ def check_illegal(word):
                             cut = word
                     if ex in cut:
                         handled = True
+                        break
                 if not handled:
+                    if showrejected:
+                            print(word[1:-1] + " rejected due to rule " + ill)
                     return True
     return False
 
@@ -251,11 +299,9 @@ def rewrite_word(word):
 for n in range(0, numwords):
     word = ""
     while check_illegal("#" + word + "%"):
-        if showrejected and word != "":
-            print("Rejected: " + word)
         word = ""
         size = random.randint(minsyllables, maxsyllables)
-        for s in range(0, size):
+        for s in range(0, size + 1):
             word = word + generatesyllable(s, size - 1)
     if show_pre_rewrite:
         print("Pre-Rewrite: " + word)

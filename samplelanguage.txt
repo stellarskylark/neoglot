@@ -26,12 +26,17 @@
 	wu
 	Yyi
 	Yye
+	je
+	zi
 	CC
 	#V%
 	nqn
+	nnq
 -ILLEGALEXCEPTIONS
 	1u
 	fu
+	Yy
+	nC
 -REWRITE
 c|ch
 	0|sh
@@ -47,3 +52,4 @@ kq|kk
 -PARAMS
 	minsylls=2
 	maxsylls=4
+	never_generate_file=samplenevergen.txt

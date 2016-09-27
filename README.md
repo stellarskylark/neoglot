@@ -12,6 +12,8 @@ A word generator, written in Python, intended for conlangs. As the name implies.
 
 For details on writing rules files, see userguide.txt
 
+There's also a web version at https://astroengisci.github.io/wordgen.html, but I really don't recommend using it for anything serious. It's really slow.
+
 #So why did you make this?
 I'm a geek.
 

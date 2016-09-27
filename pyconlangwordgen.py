@@ -225,6 +225,8 @@ def generatesyllable(index, size):
 def check_illegal(word):
     if word == "#%":
         return True
+    if illegal == []:
+        return False
     if filter_duplicates and word[1:-1] in already_generated:
         if showrejected:
             print(word[1:-1] + " rejected because it's a duplicate.")
@@ -287,6 +289,8 @@ def check_illegal(word):
 
 
 def rewrite_word(word):
+    if rewritekeys == []:
+        return word
     for inp, outp in zip(rewritekeys, rewritevalues):
         if inp in word:
             if show_rewrite_trigger:

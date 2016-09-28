@@ -8,6 +8,15 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+#Stuff for PyInstaller
+__pycache__/
+build/
+dist/
+pyconlangwordgen.spec
+
+#NINJA-IDE project file
+pyconlangwordgen.nja
+
 # Windows Installer files
 *.cab
 *.msi

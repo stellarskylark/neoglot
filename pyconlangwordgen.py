@@ -25,20 +25,31 @@ filter_duplicates = True
 already_generated = []
 never_generate_file = ""
 
-# Check that arguments are correct
-if len(sys.argv) < 3 or len(sys.argv) > 3:
-    print("Invalid arguments.")
-    print("syntax: python pywordgen.py [RULESFILE] [NUMWORDS]")
-    sys.exit()
+if len(sys.argv) > 1:
+    # Check that arguments are correct
+    if len(sys.argv) < 3 or len(sys.argv) > 3:
+        print("Invalid arguments.")
+        print("syntax: python pywordgen.py [RULESFILE] [NUMWORDS]")
+        input("Press Enter to exit...")
+        sys.exit()
 
-# Check that our arguments are typed correctly
-try:
-    rules = sys.argv[1]
-    numwords = int(sys.argv[2])
-except ValueError:
-    print("Invalid arguments")
-    print("syntax: python pywordgen.py [RULESFILE] [NUMWORDS]")
-    sys.exit()
+    # Check that our arguments are typed correctly
+    try:
+        rules = sys.argv[1]
+        numwords = int(sys.argv[2])
+    except ValueError:
+        print("Invalid arguments")
+        print("syntax: python pywordgen.py [RULESFILE] [NUMWORDS]")
+        input("Press Enter to exit...")
+        sys.exit()
+else:
+    rules = input("Path to the rules file: ")
+    try:
+        numwords = int(input("Number of words to generate: "))
+    except ValueError:
+        print("You must enter the number of words as numerals.")
+        input("Press Enter to exit...")
+        sys.exit()
 
 # Ensure that the rules file actually exists
 try:
@@ -49,6 +60,8 @@ try:
 except OSError:
     print("Rules file could not be found.")
     print("syntax: python pywordgen.py [RULESFILE] [NUMWORDS]")
+    input("Press Enter to exit...")
+    sys.exit()
 
 
 #Recursively returns a list of clusters that fit the rule
@@ -84,13 +97,16 @@ try:
         if len(cat) > 1:
             print("Your category names must be only one character long.")
             print(cat + " is invalid.")
+            input("Press Enter to exit...")
             sys.exit()
         if len(included) < 1:
             print("You must include some phonemes in category " + cat)
+            input("Press Enter to exit...")
             sys.exit()
         categories[cat] = [char for char in included]
 except ValueError:
     print("You must specify some categories.")
+    input("Press Enter to exit...")
     sys.exit()
 
 # Set up syllable types
@@ -101,6 +117,7 @@ try:
         syllables.append(rules[i].strip())
 except ValueError:
     print("You must specify some syllable types.")
+    input("Press Enter to exit...")
     sys.exit()
 
 # Set up illegal clusters
@@ -111,6 +128,7 @@ try:
         if len(rules[i].strip()) < 2:
             print("Error with illegal cluster: " + rules[i])
             print("Illegal clusters must be longer than a single category.")
+            input("Press Enter to exit...")
             sys.exit()
 
         # Recursively returns a regex that fits the rule
@@ -156,6 +174,7 @@ try:
         outp = outp.strip()
         if len(inp) < 1:
             print("Invalid rewrite rule: " + rules[i])
+            input("Press Enter to exit...")
             sys.exit()
         for repl in generate_clusters(inp):
             rewritekeys.append(repl)
@@ -203,6 +222,7 @@ if never_generate_file:
     except OSError:
         print("Could not find never-generate file at \"" + never_generate_file + "\"")
         print("Please make sure the path is correct before trying again.")
+        input("Press Enter to exit...")
         sys.exit()
 
 def generatesyllable(index, size):
@@ -317,3 +337,5 @@ for n in range(0, numwords):
     # work here, even if it's cleaner.
     print(rewrite_word("#" + word + "%").replace('#', '').replace('%', ''))
     if filter_duplicates: already_generated.append(word)
+
+input("Press Enter to exit...")

@@ -11,6 +11,8 @@ A word generator, written in Python, intended for conlangs. As the name implies.
 6. Write a rules file for your conlang. Run PyConlangWordGen again, but replace "samplelanguage.txt" with your rules file.
 7. Start building yourself a lexicon!
 
+For details on writing rules files, see userguide.txt
+
 ##With a Python installation
 1. Install the latest version of Python 3 from http://python.org.
 2. Download PyConlangWordGen.
@@ -24,6 +26,7 @@ A word generator, written in Python, intended for conlangs. As the name implies.
 
 For details on writing rules files, see userguide.txt
 
+#Web
 There's also a web version at https://astroengisci.github.io/wordgen.html, but I really don't recommend using it for anything serious. It's really slow.
 
 #So why did you make this?

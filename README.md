@@ -2,10 +2,22 @@
 A word generator, written in Python, intended for conlangs. As the name implies.
 
 #Usage Instructions
+##As a Windows executable
+1. Download and unzip pyconlangwordgen.zip
+2. Run pyconlangwordgen.exe
+3. Enter "samplelanguage.txt" (omit the quotes) when prompted for a rules file.
+4. Enter 20 when prompted for the number of words.
+5. PyConlangWordGen should print twenty words according to the constraints defined in samplelanguage.txt
+6. Write a rules file for your conlang. Run PyConlangWordGen again, but replace "samplelanguage.txt" with your rules file.
+7. Start building yourself a lexicon!
+
+##With a Python installation
 1. Install the latest version of Python 3 from http://python.org.
 2. Download PyConlangWordGen.
 3. Open CMD in the folder containing PyConlangWordGen.
-4. Run "python pyconlangwordgen.py samplelanguage.txt 20"
+4. Either:
+  1. Run "python pyconlangwordgen.py", enter samplelanguage.txt when prompted for a rules file, and 20 when prompted for number of words.
+  2. Or run "python pyconlangwordgen.py samplelanguage.txt 20"
 5. PyConlangWordGen should print twenty words according to the constraints defined in samplelanguage.txt
 6. Write a rules file for your conlang. Run PyConlangWordGen again, but replace "samplelanguage.txt" with your rules file.
 7. Start building yourself a lexicon!

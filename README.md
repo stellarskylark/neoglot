@@ -1,8 +1,8 @@
 # PyConlangWordGen
 A word generator, written in Python, intended for conlangs. As the name implies.
 
-#Usage Instructions
-##As a Windows executable
+# Usage Instructions
+## As a Windows executable
 1. Download and unzip pyconlangwordgen.zip
 2. Run pyconlangwordgen.exe
 3. Enter "samplelanguage.txt" (omit the quotes) when prompted for a rules file.
@@ -13,7 +13,7 @@ A word generator, written in Python, intended for conlangs. As the name implies.
 
 For details on writing rules files, see userguide.txt
 
-##With a Python installation
+## With a Python installation
 1. Install the latest version of Python 3 from http://python.org.
 2. Download PyConlangWordGen.
 3. Open CMD in the folder containing PyConlangWordGen.
@@ -26,10 +26,10 @@ For details on writing rules files, see userguide.txt
 
 For details on writing rules files, see userguide.txt
 
-#Web
+# Web
 There's also a web version at https://astroengisci.github.io/wordgen.html, but I really don't recommend using it for anything serious. It's really slow.
 
-#So why did you make this?
+# So why did you make this?
 I'm a geek.
 
 Okay, but seriously. I've done a bit of conlanging, and I've used Mark Rosenfelder's word generator at http://zompist.com/gen.html quite a bit. But as much as I like Mark Rosenfelder, his Language Construction Kit (responsible for most of my linguistics knowledge), and his brilliant SCA<sup>2</sup>, one thing about his word generator always bothered me: it doesn't let you specify illegality rules.

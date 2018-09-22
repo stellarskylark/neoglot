@@ -1,0 +1,7 @@
+<s> ::= {<definition> <newline>}
+<definition> ::= <category> | <syllable>
+
+<category> ::= cat <name> : {<name> ,} <name>
+<syllable> ::= syll <name> : <element> {<element>}
+
+<element> ::= '[' <name> ']' | '(' <name> ')'

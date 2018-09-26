@@ -46,23 +46,35 @@ def pullelements(syllable):
 def parsesyllable(definition):
     prefix, contents = definition.split(":")
     name = prefix.split(" ")[1]
+
+    if name in namespace:
+        vomit("'" + "' is already in use")
+
     syllable = []
 
     elements = pullelements(contents.strip())
-    for x in elements:
-        if x[0] == "[":
-            syllable.append([x[1:-1], ""])
-        else:
-            syllable.append([x[1:-1]])
+    for elem in elements:
+        inside = elem[1:-1]
+        identifiers = [x.strip() for x in inside.split("|")]
+        print(identifiers)
+        for identifier in identifiers:
+            if identifier not in namespace:
+                vomit ("'" + identifier + "' has not been defined")
+        if elem[0] == "[":
+            identifiers.append('')
+        syllable.append(identifiers)
     syllables[name] = syllable
 
 def parsedefinitions (lines):
     global currentline
     for definition in lines:
         currentline += 1
+
+        # skip empty lines
         if definition.isspace():
             continue
 
+        # lead is the first word of the line
         lead = definition.split(" ")[0]
         if lead == "cat":
             parsecategory(definition)
@@ -85,8 +97,10 @@ def gensyll():
     for cat in syllstruct:
         if cat == '':
             continue
-        syll += random.choice(categories[cat])
-
+        if cat in categories.keys():
+            syll += random.choice(categories[cat])
+        else:
+            syll += cat
     return syll
 
 parsedefinitions(lines)

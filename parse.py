@@ -1,29 +1,36 @@
 import random
 
-categories = {}
-syllables = {}
-namespace = []
-
-f = open("samplelanguage.txt", "r")
-
-lines = f.readlines()
-currentline = 1
 
 def vomit(error):
-    raise SyntaxError("Line" + str(currentline) + ": " + error)
+    """Shortcut error-raising function to reduce boilerplate."""
+    raise SyntaxError("Line" + str(CURRENTLINE) + ": " + error)
 
-def parsecategory(definition):
+def parse_name(definition):
+    """
+    For a given line, returns an array containing the name
+    defined at that location, and the contents of the definition.
+    """
     prefix, contents = definition.split(":")
     name = prefix.split(" ")[1]
+    return name, contents
+
+def parse_category(definition):
+    """Reads a phoneme category and stores it in CATEGORIES"""
+    name, contents = parse_name(definition)
     phonemes = [x.strip() for x in contents.split(",")]
 
-    namespace.append(name)
+    NAMESPACE.append(name)
     for x in phonemes:
-        if x not in namespace: namespace.append(x)
+        if x not in NAMESPACE:
+            NAMESPACE.append(x)
 
-    categories[name] = phonemes
+    CATEGORIES[name] = phonemes
 
-def pullelements(syllable):
+def pull_elements(syllable):
+    """
+    For a given syllable definition, returns a list of all
+    bracket- or parenthesis- bounded elements.
+    """
     elements = []
     endpoint = 0
     if syllable == "":
@@ -39,36 +46,50 @@ def pullelements(syllable):
 
     elements.append(syllable[:endpoint+1])
     elements.extend(
-        pullelements(syllable[endpoint+1:]))
+        pull_elements(syllable[endpoint+1:]))
     return elements
 
 
-def parsesyllable(definition):
-    prefix, contents = definition.split(":")
-    name = prefix.split(" ")[1]
+def parse_syllable(definition):
+    """
+    For a given syllable definition, reads it and
+    stores it in SYLLABLES.
 
-    if name in namespace:
+    Syllables are stored as nested lists, each interior
+    list representing a valid phoneme or phoneme group
+    for that section of the syllable. If a phoneme is
+    optional, the list includes the empty string.
+    """
+    name, contents = parse_name(definition)
+
+    if name in NAMESPACE:
         vomit("'" + "' is already in use")
 
     syllable = []
 
-    elements = pullelements(contents.strip())
+    elements = pull_elements(contents.strip())
     for elem in elements:
         inside = elem[1:-1]
         identifiers = [x.strip() for x in inside.split("|")]
         print(identifiers)
         for identifier in identifiers:
-            if identifier not in namespace:
-                vomit ("'" + identifier + "' has not been defined")
+            if identifier not in NAMESPACE:
+                vomit("'" + identifier + "' has not been defined")
         if elem[0] == "[":
             identifiers.append('')
         syllable.append(identifiers)
-    syllables[name] = syllable
+    SYLLABLES[name] = syllable
 
-def parsedefinitions (lines):
-    global currentline
+def parse_definitions(lines):
+    """
+    The basic parse loop. Steps through each line of the
+    language file and identifies what sort of definition
+    it is, then passes it off to the appropriate parsing
+    function.
+    """
+    global CURRENTLINE
     for definition in lines:
-        currentline += 1
+        CURRENTLINE += 1
 
         # skip empty lines
         if definition.isspace():
@@ -77,35 +98,47 @@ def parsedefinitions (lines):
         # lead is the first word of the line
         lead = definition.split(" ")[0]
         if lead == "cat":
-            parsecategory(definition)
+            parse_category(definition)
         elif lead == "syll":
-            parsesyllable(definition)
+            parse_syllable(definition)
         else:
             vomit("'" + lead + "' is not a valid type")
 
-def genword (num):
-    for i in range(0, num):
-        print(gensyll() + gensyll() + gensyll())
+def gen_word(num):
+    """Temporary function for testing purposes."""
+    for _ in range(0, num):
+        print(gen_syll() + gen_syll() + gen_syll())
 
-def gensyll():
+def gen_syll():
+    """Temporary function for testing purposes."""
     syll = ""
     syllstruct = []
-    sylltype = random.choice(list(syllables.keys()))
-    for element in syllables[sylltype]:
+    sylltype = random.choice(list(SYLLABLES.keys()))
+    for element in SYLLABLES[sylltype]:
         syllstruct.append(random.choice(element))
 
     for cat in syllstruct:
         if cat == '':
             continue
-        if cat in categories.keys():
-            syll += random.choice(categories[cat])
+        if cat in CATEGORIES.keys():
+            syll += random.choice(CATEGORIES[cat])
         else:
             syll += cat
     return syll
 
-parsedefinitions(lines)
-print(categories)
-print(syllables)
-print(namespace)
+CATEGORIES = {}
+SYLLABLES = {}
+NAMESPACE = []
 
-genword(10)
+f = open("samplelanguage.txt", "r")
+
+l = f.readlines()
+CURRENTLINE = 1
+
+
+parse_definitions(l)
+print(CATEGORIES)
+print(SYLLABLES)
+print(NAMESPACE)
+
+gen_word(10)

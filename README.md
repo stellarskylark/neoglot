@@ -30,7 +30,7 @@ C=mnpt'hwls0
 R=nl
 V=aeiou
 
-# Rewrite rules
+# Rewrite rules:
 0|sh
 
 # Syllable types:
@@ -53,6 +53,8 @@ fancy), eliminating the need for rewrite rules.
 
 # Neoglot To-Do List
 - Interpreter
+  - [ ] Indented lines consider a continuation of the previous
+  - [ ] Interpreter nevertheless gives the correct line number for an error
   - [x] Phoneme categories
   - Syllable definitions
     - [x] Mandatory vs optional elements

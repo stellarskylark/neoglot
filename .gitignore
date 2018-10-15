@@ -9,6 +9,7 @@ Desktop.ini
 $RECYCLE.BIN/
 
 #Stuff for PyInstaller
+.pytest_cache
 __pycache__/
 build/
 dist/
@@ -55,3 +56,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.nja
+
+# Documentation build
+docs/.build

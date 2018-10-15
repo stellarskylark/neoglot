@@ -1,0 +1,16 @@
+language: python
+python: "3.6"
+jobs:
+  include:
+    - stage: docs
+      script: ./build_test_docs.sh
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  on:
+    branch: master
+    target-branch: gh-pages
+    local-dir: docs/.build

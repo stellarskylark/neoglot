@@ -2,6 +2,8 @@
 Neoglot Code Reference
 ======================
 
-.. toctree::
+.. autosummary::
+   :toctree: 
+
    neoglot
    parse

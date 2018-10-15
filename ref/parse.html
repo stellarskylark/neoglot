@@ -1,0 +1,174 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>parse.py &#8212; Neoglot 1 documentation</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Neoglot Tutorials" href="../tutorials/index.html" />
+    <link rel="prev" title="neoglot.py" href="neoglot.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tutorials/index.html" title="Neoglot Tutorials"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="neoglot.html" title="neoglot.py"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Neoglot 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Neoglot Code Reference</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-parse">
+<span id="parse-py"></span><h1>parse.py<a class="headerlink" href="#module-parse" title="Permalink to this headline">¶</a></h1>
+<p>Contains functions related to interpreting the Neoglot DSL.</p>
+<p>The interface essentially involves creating an instance of Parse,
+which will automatically interpret the given Neoglot file.</p>
+<dl class="class">
+<dt id="parse.Parse">
+<em class="property">class </em><code class="descclassname">parse.</code><code class="descname">Parse</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/parse.html#Parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse.Parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for the parse module that automatically runs
+all the parsing functions in <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> and stores
+the parsed data in its internal variables.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parse.parse_category">
+<code class="descclassname">parse.</code><code class="descname">parse_category</code><span class="sig-paren">(</span><em>definition</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/parse.html#parse_category"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse.parse_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a phoneme category and stores it in CATEGORIES</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parse.parse_definitions">
+<code class="descclassname">parse.</code><code class="descname">parse_definitions</code><span class="sig-paren">(</span><em>lines</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/parse.html#parse_definitions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse.parse_definitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The basic parse loop. Steps through each line of the
+language file and identifies what sort of definition
+it is, then passes it off to the appropriate parsing
+function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parse.parse_name">
+<code class="descclassname">parse.</code><code class="descname">parse_name</code><span class="sig-paren">(</span><em>definition</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/parse.html#parse_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse.parse_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a given line, returns an array containing the name
+defined at that location, and the contents of the definition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parse.parse_syllable">
+<code class="descclassname">parse.</code><code class="descname">parse_syllable</code><span class="sig-paren">(</span><em>definition</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/parse.html#parse_syllable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse.parse_syllable" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a given syllable definition, reads it and
+stores it in SYLLABLES.</p>
+<p>Syllables are stored as nested lists, each interior
+list representing a valid phoneme or phoneme group
+for that section of the syllable. If a phoneme is
+optional, the list includes the empty string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parse.pull_elements">
+<code class="descclassname">parse.</code><code class="descname">pull_elements</code><span class="sig-paren">(</span><em>syllable</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/parse.html#pull_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse.pull_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a given syllable definition, returns a list of all
+bracket- or parenthesis- bounded elements.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parse.vomit">
+<code class="descclassname">parse.</code><code class="descname">vomit</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/parse.html#vomit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse.vomit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut error-raising function to reduce boilerplate.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="neoglot.html"
+                        title="previous chapter">neoglot.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../tutorials/index.html"
+                        title="next chapter">Neoglot Tutorials</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/ref/parse.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tutorials/index.html" title="Neoglot Tutorials"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="neoglot.html" title="neoglot.py"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Neoglot 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Neoglot Code Reference</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Andrew Hill.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

@@ -2,6 +2,7 @@
 
 import click
 import random
+import sys
 from parse import Parse
 
 CATEGORIES = {}
@@ -20,9 +21,17 @@ def run(file, count, minsylls, maxsylls):
     Actually runs the generator. Note that all parameters are
     supplied by the CLI through click.
     """
+    # Perform error checking
     if minsylls > maxsylls:
         click.echo("ERROR: minsylls cannot be greater than maxsylls")
-        return
+        sys.exit(2)
+    elif minsylls < 1:
+        click.echo("ERROR: minsylls must be greater than 1")
+        sys.exit(2)
+    elif count < 1:
+        click.echo("ERROR: count must be greater than 1")
+        sys.exit(2)
+
     global CATEGORIES, SYLLABLES
     parser = Parse(file)
     CATEGORIES = parser.categories

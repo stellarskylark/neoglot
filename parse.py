@@ -1,12 +1,14 @@
 import random
-
+import click
+import sys
 
 CURRENTLINE = 1
 NAMESPACE = []
 
 def vomit(error):
     """Shortcut error-raising function to reduce boilerplate."""
-    raise SyntaxError("Line" + str(CURRENTLINE) + ": " + error)
+    click.echo("SYNTAX ERROR -- Line " + str(CURRENTLINE) + ": " + error)
+    sys.exit(1)
 
 def parse_name(definition):
     """
@@ -116,7 +118,11 @@ class Parse:
     syllables = {}
 
     def __init__(self, file):
-        f = open(file, 'r')
+        try:
+            f = open(file, 'r')
+        except FileNotFoundError:
+            click.echo("ERROR: File " + file + " does not exist.")
+            sys.exit(2)
         l = f.readlines()
         self.categories, self.syllables = parse_definitions(l)
 

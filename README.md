@@ -77,5 +77,5 @@ fancy), eliminating the need for rewrite rules.
   - [ ] Optionally generate text in sentence-style environments
   - [ ] Optional probability dropoff for phonemes and syllable types; the ones
         defined first appear more commonly
-  - [ ] Command-line interface
+  - [x] Command-line interface
   - [ ] GUI interface

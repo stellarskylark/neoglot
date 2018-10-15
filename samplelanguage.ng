@@ -1,4 +1,4 @@
-cat consonant: m, n, p, t, ', h, w, l
+cat consonant: m, n, p, t, ', h, w, l, s, sh
 cat vowel: a, e, i, o, u
 
-syll main: [consonant](vowel | n | l)[vowel][n]
+syll main: [consonant] (vowel | n | l) [vowel] [n]

@@ -1,6 +1,9 @@
 import random
 
 
+CURRENTLINE = 1
+NAMESPACE = []
+
 def vomit(error):
     """Shortcut error-raising function to reduce boilerplate."""
     raise SyntaxError("Line" + str(CURRENTLINE) + ": " + error)
@@ -24,7 +27,7 @@ def parse_category(definition):
         if x not in NAMESPACE:
             NAMESPACE.append(x)
 
-    CATEGORIES[name] = phonemes
+    return name, phonemes
 
 def pull_elements(syllable):
     """
@@ -46,7 +49,7 @@ def pull_elements(syllable):
 
     elements.append(syllable[:endpoint+1])
     elements.extend(
-        pull_elements(syllable[endpoint+1:]))
+        pull_elements(syllable[endpoint+1:].strip()))
     return elements
 
 
@@ -71,14 +74,13 @@ def parse_syllable(definition):
     for elem in elements:
         inside = elem[1:-1]
         identifiers = [x.strip() for x in inside.split("|")]
-        print(identifiers)
         for identifier in identifiers:
             if identifier not in NAMESPACE:
                 vomit("'" + identifier + "' has not been defined")
         if elem[0] == "[":
             identifiers.append('')
         syllable.append(identifiers)
-    SYLLABLES[name] = syllable
+    return name, syllable
 
 def parse_definitions(lines):
     """
@@ -88,6 +90,8 @@ def parse_definitions(lines):
     function.
     """
     global CURRENTLINE
+    categories = {}
+    syllables = {}
     for definition in lines:
         CURRENTLINE += 1
 
@@ -98,47 +102,21 @@ def parse_definitions(lines):
         # lead is the first word of the line
         lead = definition.split(" ")[0]
         if lead == "cat":
-            parse_category(definition)
+            name, cat = parse_category(definition)
+            categories[name] = cat
         elif lead == "syll":
-            parse_syllable(definition)
+            name, syll = parse_syllable(definition)
+            syllables[name] = syll
         else:
             vomit("'" + lead + "' is not a valid type")
+    return categories, syllables
 
-def gen_word(num):
-    """Temporary function for testing purposes."""
-    for _ in range(0, num):
-        print(gen_syll() + gen_syll() + gen_syll())
+class Parse:
+    categories = {}
+    syllables = {}
 
-def gen_syll():
-    """Temporary function for testing purposes."""
-    syll = ""
-    syllstruct = []
-    sylltype = random.choice(list(SYLLABLES.keys()))
-    for element in SYLLABLES[sylltype]:
-        syllstruct.append(random.choice(element))
+    def __init__(self, file):
+        f = open(file, 'r')
+        l = f.readlines()
+        self.categories, self.syllables = parse_definitions(l)
 
-    for cat in syllstruct:
-        if cat == '':
-            continue
-        if cat in CATEGORIES.keys():
-            syll += random.choice(CATEGORIES[cat])
-        else:
-            syll += cat
-    return syll
-
-CATEGORIES = {}
-SYLLABLES = {}
-NAMESPACE = []
-
-f = open("samplelanguage.txt", "r")
-
-l = f.readlines()
-CURRENTLINE = 1
-
-
-parse_definitions(l)
-print(CATEGORIES)
-print(SYLLABLES)
-print(NAMESPACE)
-
-gen_word(10)

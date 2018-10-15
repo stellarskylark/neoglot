@@ -72,10 +72,10 @@ fancy), eliminating the need for rewrite rules.
     - [ ] Check for and apply transformations within a syllable
     - [ ] Check for and apply transformations between syllable boundaries
 - Generator
-  - [ ] Generate a specified number of words
-  - [ ] Allow user to specify a range for length of words in syllables
+  - [x] Generate a specified number of words
+  - [x] Allow user to specify a range for length of words in syllables
   - [ ] Optionally generate text in sentence-style environments
   - [ ] Optional probability dropoff for phonemes and syllable types; the ones
         defined first appear more commonly
-  - [ ] Command-line interface
+  - [x] Command-line interface
   - [ ] GUI interface

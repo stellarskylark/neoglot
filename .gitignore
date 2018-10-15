@@ -55,3 +55,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.nja
+
+# Documentation build
+docs/.build

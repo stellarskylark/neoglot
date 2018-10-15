@@ -1,4 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+"""
+The primary executable file for Neoglot. Uses ``click`` to
+provide a command-line interface.
+
+The function run() is not picked up by Sphinx because of ``click``,
+but it is the actual command which the CLI runs.
+"""
 
 import click
 import random

@@ -1,3 +1,9 @@
+"""
+Contains functions related to interpreting the Neoglot DSL.
+
+The interface essentially involves creating an instance of Parse,
+which will automatically interpret the given Neoglot file.
+"""
 import random
 import click
 import sys
@@ -114,6 +120,11 @@ def parse_definitions(lines):
     return categories, syllables
 
 class Parse:
+    """
+    Wrapper for the parse module that automatically runs
+    all the parsing functions in ``__init__()`` and stores
+    the parsed data in its internal variables.
+    """
     categories = {}
     syllables = {}
 

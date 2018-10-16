@@ -2,6 +2,8 @@ language: python
 python: "3.6"
 jobs:
   include:
+    - stage: pytest
+      script: pytest
     - stage: docs
       script: ./build_test_docs.sh
 

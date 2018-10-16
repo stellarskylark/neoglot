@@ -11,7 +11,6 @@ but it is the actual command which the CLI runs.
 import click
 import random
 import sys
-from parse import Parse
 
 CATEGORIES = {}
 SYLLABLES = {}
@@ -31,17 +30,23 @@ def run(file, count, minsylls, maxsylls):
     """
     # Perform error checking
     if minsylls > maxsylls:
-        click.echo("ERROR: minsylls cannot be greater than maxsylls")
+        click.echo("Error: minsylls cannot be greater than maxsylls")
         sys.exit(2)
     elif minsylls < 1:
-        click.echo("ERROR: minsylls must be greater than 1")
+        click.echo("Error: minsylls must be greater than 1")
         sys.exit(2)
     elif count < 1:
-        click.echo("ERROR: count must be greater than 1")
+        click.echo("Error: count must be greater than 1")
+        sys.exit(2)
+
+    try:
+        file_contents = open(file, 'r')
+    except FileNotFoundError:
+        click.echo("Error: file " + file + " does not exist")
         sys.exit(2)
 
     global CATEGORIES, SYLLABLES
-    parser = Parse(file)
+    parser = Parse(file_contents)
     CATEGORIES = parser.categories
     SYLLABLES = parser.syllables
     print_words(count, minsylls, maxsylls)

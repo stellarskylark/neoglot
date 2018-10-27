@@ -136,8 +136,13 @@ class Parse:
 
     def __init__(self, file):
         # with does error checking
-        with open(file, 'r') as f:  # Use file to refer to the file object
-            data = f.readlines()
-            self.categories, self.syllables = parse_definitions(data)
+        try:
+            with open(file, 'r') as f:  # Use file to refer to the file object
+                data = f.readlines()
+                self.categories, self.syllables = parse_definitions(data)
+        except FileNotFoundError:
+            click.echo("ERROR: File " + file + " does not exist.")
+            sys.exit(2)
+
 
 

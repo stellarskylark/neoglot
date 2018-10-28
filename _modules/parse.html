@@ -57,10 +57,12 @@
 <span class="n">CURRENTLINE</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">NAMESPACE</span> <span class="o">=</span> <span class="p">[]</span>
 
+
 <div class="viewcode-block" id="vomit"><a class="viewcode-back" href="../ref/parse.html#parse.vomit">[docs]</a><span class="k">def</span> <span class="nf">vomit</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Shortcut error-raising function to reduce boilerplate.&quot;&quot;&quot;</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;SYNTAX ERROR -- Line &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">CURRENTLINE</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="n">error</span><span class="p">)</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="parse_name"><a class="viewcode-back" href="../ref/parse.html#parse.parse_name">[docs]</a><span class="k">def</span> <span class="nf">parse_name</span><span class="p">(</span><span class="n">definition</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -70,6 +72,7 @@
     <span class="n">prefix</span><span class="p">,</span> <span class="n">contents</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">contents</span></div>
+
 
 <div class="viewcode-block" id="parse_category"><a class="viewcode-back" href="../ref/parse.html#parse.parse_category">[docs]</a><span class="k">def</span> <span class="nf">parse_category</span><span class="p">(</span><span class="n">definition</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Reads a phoneme category and stores it in CATEGORIES&quot;&quot;&quot;</span>
@@ -82,6 +85,7 @@
             <span class="n">NAMESPACE</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">phonemes</span></div>
+
 
 <div class="viewcode-block" id="pull_elements"><a class="viewcode-back" href="../ref/parse.html#parse.pull_elements">[docs]</a><span class="k">def</span> <span class="nf">pull_elements</span><span class="p">(</span><span class="n">syllable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -136,6 +140,7 @@
         <span class="n">syllable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">identifiers</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">syllable</span></div>
 
+
 <div class="viewcode-block" id="parse_definitions"><a class="viewcode-back" href="../ref/parse.html#parse.parse_definitions">[docs]</a><span class="k">def</span> <span class="nf">parse_definitions</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The basic parse loop. Steps through each line of the</span>
@@ -165,6 +170,7 @@
             <span class="n">vomit</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">lead</span> <span class="o">+</span> <span class="s2">&quot;&#39; is not a valid type&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">categories</span><span class="p">,</span> <span class="n">syllables</span></div>
 
+
 <div class="viewcode-block" id="Parse"><a class="viewcode-back" href="../ref/parse.html#parse.Parse">[docs]</a><span class="k">class</span> <span class="nc">Parse</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper for the parse module that automatically runs</span>
@@ -175,13 +181,16 @@
     <span class="n">syllables</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="c1"># with does error checking</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>  <span class="c1"># Use file to refer to the file object</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">syllables</span> <span class="o">=</span> <span class="n">parse_definitions</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
             <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;ERROR: File &quot;</span> <span class="o">+</span> <span class="n">file</span> <span class="o">+</span> <span class="s2">&quot; does not exist.&quot;</span><span class="p">)</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">l</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">syllables</span> <span class="o">=</span> <span class="n">parse_definitions</span><span class="p">(</span><span class="n">l</span><span class="p">)</span></div>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
+
+
 
 </pre></div>
 

@@ -11,10 +11,12 @@ import sys
 CURRENTLINE = 1
 NAMESPACE = []
 
+
 def vomit(error):
     """Shortcut error-raising function to reduce boilerplate."""
     click.echo("SYNTAX ERROR -- Line " + str(CURRENTLINE) + ": " + error)
     sys.exit(1)
+
 
 def parse_name(definition):
     """
@@ -24,6 +26,7 @@ def parse_name(definition):
     prefix, contents = definition.split(":")
     name = prefix.split(" ")[1]
     return name, contents
+
 
 def parse_category(definition):
     """Reads a phoneme category and stores it in CATEGORIES"""
@@ -36,6 +39,7 @@ def parse_category(definition):
             NAMESPACE.append(x)
 
     return name, phonemes
+
 
 def pull_elements(syllable):
     """
@@ -90,6 +94,7 @@ def parse_syllable(definition):
         syllable.append(identifiers)
     return name, syllable
 
+
 def parse_definitions(lines):
     """
     The basic parse loop. Steps through each line of the
@@ -119,6 +124,7 @@ def parse_definitions(lines):
             vomit("'" + lead + "' is not a valid type")
     return categories, syllables
 
+
 class Parse:
     """
     Wrapper for the parse module that automatically runs
@@ -129,11 +135,14 @@ class Parse:
     syllables = {}
 
     def __init__(self, file):
+        # with does error checking
         try:
-            f = open(file, 'r')
+            with open(file, 'r') as f:  # Use file to refer to the file object
+                data = f.readlines()
+                self.categories, self.syllables = parse_definitions(data)
         except FileNotFoundError:
             click.echo("ERROR: File " + file + " does not exist.")
             sys.exit(2)
-        l = f.readlines()
-        self.categories, self.syllables = parse_definitions(l)
+
+
 

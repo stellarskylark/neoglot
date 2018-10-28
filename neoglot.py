@@ -1,4 +1,4 @@
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 
 """
 The primary executable file for Neoglot. Uses ``click`` to

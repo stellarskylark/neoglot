@@ -10,6 +10,7 @@ but it is the actual command which the CLI runs.
 import click
 import random
 import sys
+import parse
 
 CATEGORIES = {}
 SYLLABLES = {}
@@ -39,13 +40,13 @@ def run(file, count, minsylls, maxsylls):
         sys.exit(2)
 
     try:
-        file_contents = open(file, 'r')
+        with open(file, 'r') as file_contents:
+            global CATEGORIES, SYLLABLES
+            parser = parse.Parse(file_contents)
     except FileNotFoundError:
         click.echo("Error: file " + file + " does not exist")
         sys.exit(2)
 
-    global CATEGORIES, SYLLABLES
-    parser = Parse(file_contents)
     CATEGORIES = parser.categories
     SYLLABLES = parser.syllables
     print_words(count, minsylls, maxsylls)

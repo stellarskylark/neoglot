@@ -11,10 +11,12 @@ import sys
 CURRENTLINE = 1
 NAMESPACE = []
 
+
 def vomit(error):
     """Shortcut error-raising function to reduce boilerplate."""
     click.echo("Syntax Error -- Line " + str(CURRENTLINE) + ": " + error)
     sys.exit(1)
+
 
 def parse_def(definition):
     """For a given definition, returns a tuple containing the type of
@@ -36,6 +38,7 @@ def parse_def(definition):
 
     return def_type.strip(), name.strip(), contents.strip()
 
+
 def parse_category(contents):
     """Given the contents of a category definition, returns a tuple a list
     of the phonemes it contains.
@@ -55,6 +58,7 @@ def parse_category(contents):
             NAMESPACE.append(x)
 
     return phonemes
+
 
 def pull_elements(syllable):
     """For a given syllable definition, returns a list of all bracket- or
@@ -83,6 +87,7 @@ def pull_elements(syllable):
     elements.extend(pull_elements(remaining))
     return elements
 
+
 def parse_syllable(contents):
     """For a given syllable definition, returns a nested lists, each
     interior list representing a valid phoneme or phoneme group for
@@ -102,6 +107,7 @@ def parse_syllable(contents):
             identifiers.append('')
         syllable.append(identifiers)
     return syllable
+
 
 def parse_definitions(lines):
     """The basic parse loop. Steps through each line of the language
@@ -131,6 +137,7 @@ def parse_definitions(lines):
         else:
             vomit("'" + def_type + "' is not a valid type")
     return categories, syllables
+
 
 class Parse:
     """Wrapper for the parse module that automatically runs

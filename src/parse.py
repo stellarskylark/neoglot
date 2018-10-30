@@ -1,9 +1,9 @@
 """Contains functions related to interpreting the Neoglot DSL.
 
-The interface essentially involves creating an instance of Parse, which will
-automatically interpret the given Neoglot file.
-
+The interface essentially involves creating an instance of Parse, which
+will automatically interpret the given Neoglot file.
 """
+
 import random
 import click
 import sys
@@ -13,13 +13,13 @@ NAMESPACE = []
 
 def vomit(error):
     """Shortcut error-raising function to reduce boilerplate."""
-    click.echo("SYNTAX ERROR -- Line " + str(CURRENTLINE) + ": " + error)
+    click.echo("Syntax Error -- Line " + str(CURRENTLINE) + ": " + error)
     sys.exit(1)
 
 def parse_def(definition):
-    """For a given definition, returns a tuple containing the type of definition,
-    name defined at that location, and the contents of the definition.
-
+    """For a given definition, returns a tuple containing the type of
+    definition, name defined at that location, and the contents of the
+    definition.
     """
     try:
         prefix, contents = definition.split(":")
@@ -37,9 +37,8 @@ def parse_def(definition):
     return def_type.strip(), name.strip(), contents.strip()
 
 def parse_category(contents):
-    """Given the contents of a category definition, returns a tuple a list of the
-    phonemes it contains.
-
+    """Given the contents of a category definition, returns a tuple a list
+    of the phonemes it contains.
     """
     phonemes = []
     for x in contents.split(","):
@@ -59,8 +58,7 @@ def parse_category(contents):
 
 def pull_elements(syllable):
     """For a given syllable definition, returns a list of all bracket- or
-    parenthesis- bounded elements.
-
+    parenthesis-bounded elements.
     """
     elements = []
     endpoint = 0
@@ -75,17 +73,21 @@ def pull_elements(syllable):
     if endpoint == -1:
         vomit("expected ']'")
 
-    elements.append(syllable[:endpoint+1])
-    elements.extend(
-        pull_elements(syllable[endpoint+1:].strip()))
+    capture = syllable[:endpoint+1].strip()
+    remaining = syllable[endpoint+1:].strip()
+    if (capture.count('(') != capture.count(')')
+    or capture.count('[') != capture.count(']')):
+       vomit("Unbalanced parentheses or brackets in '" + capture + "'")
+
+    elements.append(capture)
+    elements.extend(pull_elements(remaining))
     return elements
 
-
 def parse_syllable(contents):
-    """For a given syllable definition, returns a nested lists, each interior list
-    representing a valid phoneme or phoneme group for that section of the
-    syllable. If a phoneme is optional, the list includes the empty string.
-
+    """For a given syllable definition, returns a nested lists, each
+    interior list representing a valid phoneme or phoneme group for
+    that section of the syllable. If a phoneme is optional, the list
+    includes the empty string.
     """
     syllable = []
 
@@ -102,10 +104,9 @@ def parse_syllable(contents):
     return syllable
 
 def parse_definitions(lines):
-    """The basic parse loop. Steps through each line of the language file and
-    identifies what sort of definition it is, then passes it off to the
-    appropriate parsing function.
-
+    """The basic parse loop. Steps through each line of the language
+    file and identifies what sort of definition it is, then passes it
+    off to the appropriate parsing function.
     """
     global CURRENTLINE
     categories = {}
@@ -132,8 +133,7 @@ def parse_definitions(lines):
     return categories, syllables
 
 class Parse:
-    """
-    Wrapper for the parse module that automatically runs
+    """Wrapper for the parse module that automatically runs
     all the parsing functions in ``__init__()`` and stores
     the parsed data in its internal variables.
     """
